@@ -1,0 +1,16 @@
+{
+    "data": {
+        "name": "patient name",
+        "age": 28,
+        "gender": "Male",
+        
+        "small_field_1": "xyz1",
+        "small_field_2": "xyz2",
+        "small_field_3": "xyz3",
+        "small_field_4": "xyz4",
+
+        "big_field_1": "abc1",
+        "big_field_2": "abc2",
+        "big_field_3": "abc3"
+    }
+  }
