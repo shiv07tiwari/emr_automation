@@ -1,10 +1,17 @@
+import json
+
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 from faker import Faker
 
 
+def front(request):
+    my_data = {"A": "Hello"}  # your own logic to get data
+    return render(request, "index.html", {"data": json.dumps(my_data)})
+
 class HomeView(TemplateView):
-    template_name = 'home.html'
+    template_name = 'index.html'
 
     def random_text(self):
         fake = Faker()
@@ -29,4 +36,11 @@ class HomeView(TemplateView):
 
 
 class AudioAnalysis(TemplateView):
-    template_name = 'audio_analysis.html'    
+    def get(self, request, *args, **kwargs):
+        # request.data
+        payload = {
+            "conversation_id": "123456789",
+            "text": ""
+        }
+        sample_data = {"name": "John", "age": 30, "city": "New York"}
+        return JsonResponse(sample_data, safe=False)

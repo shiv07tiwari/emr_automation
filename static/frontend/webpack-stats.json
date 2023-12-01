@@ -1,0 +1,18 @@
+{
+  "status": "error",
+  "assets": {
+    "frontend-71940676a5d76c988751.js": {
+      "name": "frontend-71940676a5d76c988751.js",
+      "path": "/Users/shivansh/Workspace/emr_automation/emr_automation/frontend/static/frontend/frontend-71940676a5d76c988751.js",
+      "publicPath": "static/frontend/frontend-71940676a5d76c988751.js"
+    }
+  },
+  "chunks": {
+    "frontend": [
+      "frontend-71940676a5d76c988751.js"
+    ]
+  },
+  "publicPath": "static/frontend/",
+  "error": "ModuleNotFoundError",
+  "message": "Module not found: Error: Can't resolve 'babel-loader' in '/Users/shivansh/Workspace/emr_automation/emr_automation'"
+}
