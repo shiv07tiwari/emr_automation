@@ -1,14 +1,182 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f9ff;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            align-items: center;
+        }
+        .container-card {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    padding: 8px;
+    margin-bottom: 15px;
+    width: 100%;
+    height: auto;
+    min-height: 100px;  /* Adjust this value to suit your needs */
+    max-height: 200px;  /* Adjust this value to suit your needs */
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    overflow-y:auto;
+}
+        .container-card input {
+            margin-right: 20px;
+        }
+        .container-card label {
+            font-size: 1em;
+        }
+        .card {
+            max-width: 800px;
+            width: 100%;
+            padding: 2rem;
+            height: 600px;
+        }
+        .main-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .main-card h1 {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1em; // added some bottom margin to the header
+        }
+        .main-card p {
+            font-size: 1rem;
+            color: #777;
+            display: none;
+        }
 
-{% block title %}
-	Home
-{% endblock %}
+        button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px auto;
+            width: 150px;
+            height: 40px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            background-color: #4299e1;
+            color: #ffffff;
+            border: none;
+            transition: background .3s ease;
+            cursor: pointer;
+        }
+        #record {
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+        }
+        button:hover {
+            background-color: #2b7a9e;
+        }
+        .custom-col {
+            height: 1200px;    /* Or the height you want */
+        }
 
-{% block main_content %}
-    <h1>Home</h1>
-    <h6> Can type something here!</h6>
-    <hr>
-    <h3> Can type something here!</h5>
-    <br />
-    <a href = "/audio-analysis/"><button class="btn btn-primary">start recording!</button></a>
-{% endblock main_content %}
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: #4299e1;
+            transform: scale(0);
+            opacity: 0.4;
+            transition: transform 1s, opacity 2s;
+        }
+
+        .ripple.animate:after {
+            transform: scale(100);
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="body">
+    <div class="row justify-content-center" style="width: 1600px">
+        <div class="col-lg-5 custom-col">
+            <div class="card main-card">
+                <h1>Healthcare App</h1>
+                <button id="record" class="ripple" onclick="startRecording()">Start Recording</button>
+                <button>New Patient</button>
+                <button>Stop Recording</button>
+                <p>Recording Started...</p>
+            </div>
+        </div>
+        <div class="col-lg-6 custom-col">
+            <div class="card column-card">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>Pending</h4>
+                        <div class="container-card">
+                            <input type="checkbox" id="checkbox1" name="checkbox1" value="value">
+                            <label for="checkbox1"> {{ random_text_1 }}</label>
+                        </div>
+                        <div class="container-card">
+                            <input type="checkbox" id="checkbox2" name="checkbox2" value="value">
+                            <label for="checkbox2"> {{ random_text_2 }}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>Verified</h4>
+                        <div class="container-card">
+                            <input type="checkbox" id="checkbox3" name="checkbox3" value="value">
+                            <label for="checkbox3"> {{ random_text_3 }}</label>
+                        </div>
+                        <div class="container-card">
+                            <input type="checkbox" id="checkbox4" name="checkbox4" value="value">
+                            <label for="checkbox4">{{ random_text_4 }}</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>Discarded</h4>
+                        <div class="container-card">
+                            <input type="checkbox" id="checkbox5" name="checkbox5" value="value">
+                            <label for="checkbox5">{{ random_text_1}}</label>
+                        </div>
+                        <div class="container-card">
+                            <input type="checkbox" id="checkbox6" name="checkbox6" value="value">
+                            <label for="checkbox6"> {{ random_text_1 }}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function logout() {
+            console.log("Logged out");
+        }
+        function startRecording() {
+          document.querySelector('p').style.display = 'block';
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Your JavaScript code here
+            document.getElementById('record').addEventListener('click', function (e) {
+                e.target.classList.add('animate');
+                setTimeout(function () {
+                    e.target.classList.remove('animate')
+                }, 1000)
+            });
+        });
+    </script>
+</body>
+</html>
