@@ -97,4 +97,4 @@ Doctor: You're welcome, Emily. We're here to support you. If you have any questi
 
         # generate a random string
         response = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
-        return JsonResponse({'a':'b', response:'d'}, safe=False)
+        return JsonResponse(response, safe=False)

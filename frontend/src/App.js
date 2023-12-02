@@ -1,143 +1,92 @@
-import React, {useEffect, useState} from "react";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import {Collapse, Form} from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Clipboard from "react-clipboard.js";
-
-import "./App.css";
-import SpeechRecognition, {useSpeechRecognition} from "react-speech-recognition";
+import React from "react";
+import { Button, Card, Typography, Row, Col, Tooltip } from "antd";
+import { SoundOutlined, StopOutlined, UndoOutlined } from '@ant-design/icons';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import Table from "./Table";
-import {FcSurvey} from "react-icons/fc";
 
+const { Title, Paragraph } = Typography;
 
 function App() {
     const {
-        transcript,
-        interimTranscript,
-        finalTranscript,
-        listening,
-        resetTranscript,
-        browserSupportsSpeechRecognition
+      transcript,
+      listening ,
+      resetTranscript,
+      browserSupportsSpeechRecognition
     } = useSpeechRecognition();
 
-    console.log(transcript, " ", interimTranscript, " ", finalTranscript)
-
-
-    const listenContinuously = () => {
-        SpeechRecognition.startListening({
-            continuous: true,
-            language: 'en-GB',
-        });
-    };
-
     if (!browserSupportsSpeechRecognition) {
-        return <span>Browser doesn't support speech recognition.</span>;
+      return <div>Browser doesn't support speech recognition.</div>;
     }
 
+    const listenContinuously = () => {
+      SpeechRecognition.startListening({
+          continuous: true,
+          language: 'en-US'
+      });
+    };
+
     return (
-        <div className="App">
-            <header className="App-header">
-                <div style={{display: "flex", justifyContent: "space-around", padding: "8px", height: "50rem"}}>
-                    <Card style={{
-                        width: "36rem",
-                        margin: "10px",
-                        backgroundColor: "white",
-                        borderRadius: "15px",
-                        boxShadow: "5px 5px 15px rgba(0, 0, 0, 0.2)"
-                    }}>
-                        <Card.Body style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            // justifyContent: "center"
-                        }}>
-                            <div className="d-flex flex-row justify-content-between">
-                                <small>Welcome Dr. Tiwari</small>
-                            </div>
+        <div style={{
+             height: '100vh',
+            padding: '30px',
+            overflow: 'hidden',
+            backgroundColor: '#ffffff'
+        }}>
+            <Row gutter={[16, 16]} style={{alignItems: 'flex-start'}}>
+                <Col span={6} style={{ minHeight: '85vh' }}>
+                    <Card title={<Title level={4}>Welcome Dr. Tiwari</Title>} bordered={false} style={ cardStyle }>
+                        <Tooltip title="Start recording">
                             <Button
-                                onClick={listenContinuously}
-                                disabled={listening}
-                                style={{
-                                    borderRadius: "80%",
-                                    marginTop: "20px",
-                                    padding: "60px",
-                                    fontSize: "24px",
-                                    color: "white",
-                                    backgroundColor: "#007bff",
-                                    border: "none",
-                                    transition: "0.3s",
-                                    cursor: "pointer",
-                                    boxShadow: "0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12)"
-                                }}
-                                onMouseOver={e => {
-                                    e.target.style.backgroundColor = "#0056b3";
-                                    e.target.style.boxShadow = "0 8px 17px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)";
-                                }}
-                                onMouseOut={e => {
-                                    e.target.style.backgroundColor = "#007bff";
-                                    e.target.style.boxShadow = "0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12)";
-                                }}
+                                icon={ listening ? <StopOutlined /> : <SoundOutlined /> }
+                                onClick={ listening ? SpeechRecognition.stopListening : listenContinuously }
+                                type="primary"
+                                size="large"
+                                block
+                                style={{ marginBottom: '15px' }}
                             >
-                                Start
+                                { listening ? 'Stop' : 'Start'}
                             </Button>
-                            {listening && <small style={{marginTop: "10px"}}>Recording in progress...</small>}
-                            <div>
-                                <Button
-                                    onClick={SpeechRecognition.stopListening}
-                                    style={{
-                                        fontSize: "24px",
-                                        color: "white",
-                                        backgroundColor: "#007bff",
-                                        border: "none",
-                                        transition: "0.3s",
-                                        marginRight: "10px",
-                                        marginTop: "10px",
-                                    }}
-                                >Stop
-                                </Button>
-                                <Button
-                                    style={{
-                                        fontSize: "24px",
-                                        color: "white",
-                                        backgroundColor: "#007bff",
-                                        border: "none",
-                                        transition: "0.3s",
-                                        marginLeft: "10px",
-                                        marginTop: "10px",
-                                    }}
-                                    onClick={resetTranscript}
-                                >Reset</Button>
-                                {
-                                    transcript && (
-                                        <Card className='transcript-card'>
-                                            <Card.Body>
-                                                <Collapse in={true}>
-                                                    <div className='transcript-view'>
-                                                        <div className='copy-button border-none align-self-end border-none'>
-                                                            <Clipboard className="border-none position-relative"
-                                                                       data-clipboard-text={transcript}>
-                                                                <FcSurvey/>
-                                                            </Clipboard>
-                                                        </div>
-                                                        <div className='transcript-text'
-                                                             style={{maxHeight: '400px', overflow: 'auto'}}>
-                                                            <p>{transcript}</p>
-                                                        </div>
-                                                    </div>
-                                                </Collapse>
-                                            </Card.Body>
-                                        </Card>
-                                    )
-                                }
-                            </div>
-                        </Card.Body>
+                        </Tooltip>
+
+                        { listening &&
+                            <div style={{margin: '10px 0', color: '#1890ff'}}>Recording in progress...</div>
+                        }
+
+                        <Tooltip title="Reset Recording">
+                            <Button
+                                icon={<UndoOutlined />}
+                                onClick={resetTranscript}
+                                type="default"
+                                size="large"
+                                block
+                                style={{ marginBottom: '15px' }}
+                            >
+                                Reset
+                            </Button>
+                        </Tooltip>
+
+                        { transcript && (
+                            <Card title="Transcript" style={{ ...cardStyle, height: '50vh', overflowY: 'auto' }}>
+                                <Paragraph
+                                    copyable={{ text: transcript }}
+                                >
+                                    {transcript}
+                                </Paragraph>
+                            </Card>
+                        )}
                     </Card>
-                    <Table transcript={transcript}></Table>
-                </div>
-            </header>
+                </Col>
+                <Col span={18}>
+                    <Table transcript={transcript} />
+                </Col>
+            </Row>
         </div>
     );
+}
+
+const cardStyle = {
+    borderRadius: '10px',
+    boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.08)'
 }
 
 export default App;
