@@ -21,16 +21,8 @@ function App() {
         browserSupportsSpeechRecognition
     } = useSpeechRecognition();
 
-    useEffect(() => {
-        console.log('Got interim result:', interimTranscript);
-        console.log('Got final result:', finalTranscript);
-        if (finalTranscript !== '') {
-            console.log('Got final result:', finalTranscript);
-        }
-    }, [interimTranscript, finalTranscript]);
-    if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
-        return null;
-    }
+    console.log(transcript, " ", interimTranscript, " ", finalTranscript)
+
 
     const listenContinuously = () => {
         SpeechRecognition.startListening({
@@ -46,7 +38,7 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <div style={{display: "flex", justifyContent: "space-around", padding: "8px", height: "auto"}}>
+                <div style={{display: "flex", justifyContent: "space-around", padding: "8px", height: "50rem"}}>
                     <Card style={{
                         width: "36rem",
                         margin: "10px",
@@ -128,7 +120,8 @@ function App() {
                                                                 <FcSurvey/>
                                                             </Clipboard>
                                                         </div>
-                                                        <div className='transcript-text'>
+                                                        <div className='transcript-text'
+                                                             style={{maxHeight: '400px', overflow: 'auto'}}>
                                                             <p>{transcript}</p>
                                                         </div>
                                                     </div>
@@ -140,7 +133,7 @@ function App() {
                             </div>
                         </Card.Body>
                     </Card>
-                    <Table></Table>
+                    <Table transcript={transcript}></Table>
                 </div>
             </header>
         </div>

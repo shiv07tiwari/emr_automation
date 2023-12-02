@@ -1,37 +1,56 @@
 import Card from "react-bootstrap/Card";
 import {Form} from "react-bootstrap";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheckCircle} from '@fortawesome/free-solid-svg-icons';
 
-function Table() {
-    const baseItems = [...new Array(25)].map((x, i) => ({
-        id: i + 1,
-        text: "Item " + (i + 1)
-    }));
+function Table(transcript) {
+    const [prevTranscript, setPrevTranscript] = useState(undefined);
+    const [res, setRes] = useState({});
 
-    const [pendingItems, setPendingItems] = useState(baseItems);
+    const [pendingItems, setPendingItems] = useState([]);
     const [verifiedItems, setVerifiedItems] = useState([]);
     const [discardedItems, setDiscardedItems] = useState([]);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const a = transcript === undefined || transcript !== prevTranscript ;
+            if (a) {
+                fetch('http://localhost:8000/audio-analysis/',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            "conversation_id": "ABC",
+                            'text': transcript,
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        setRes(data);
+                        setPendingItems(Object.entries(data).map(([key, value], index) => ({
+                            key: key,
+                            value: value,
+                        })));
+                        setPrevTranscript(transcript);
+                    });
+            }
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [transcript, prevTranscript]);
+
     const handleVerification = id => {
-        const item = pendingItems.find(item => item.id === id);
-        setVerifiedItems(prevItems => [...prevItems, item]);
-        setPendingItems(prevItems => prevItems.filter(item => item.id !== id));
+        const item = pendingItems.find(item => item.key === id);
+        setPendingItems(pendingItems.filter(item => item.key !== id));
+        item.verified = true;
+        setVerifiedItems([...verifiedItems, item]);
     }
 
-    const handleItemChange = (id, text, status) => {
-        if (status === 'Pending') {
-            setPendingItems(prevItems =>
-                prevItems.map(item => item.id === id ? {...item, text} : item)
-            );
-        } else if (status === 'Verified') {
-            setVerifiedItems(prevItems =>
-                prevItems.map(item => item.id === id ? {...item, text} : item)
-            );
-        }
-    }
 
+    // convert res.res which is a json object to an array of key value pairs
     return (
         <Card style={{
             width: "80rem",
@@ -67,7 +86,7 @@ function Table() {
                                     <Card style={{
                                         marginTop: '10px',
                                         marginBottom: '10px',
-                                        height: '50px',
+                                        height: '60px',
                                         display: 'flex',
                                         flexDirection: 'row',
                                         alignItems: 'center',
@@ -75,23 +94,24 @@ function Table() {
                                         border: '1px solid #e9ecef'
                                     }} key={item.id}>
                                         {
-                                            status === 'Pending' ? (
+                                            !item.verified ? (
                                                 <Form.Check
                                                     custom
+                                                    checked={item.verified}
                                                     type="checkbox"
                                                     id={`custom-checkbox-${item.id}`}
                                                     label={""}
                                                     style={{marginRight: '0px', marginLeft: '10px'}}
-                                                    onChange={() => handleVerification(item.id)}
+                                                    onChange={() => handleVerification(item.key)}
                                                 />
                                             ) : (
                                                 <FontAwesomeIcon
                                                     icon={faCheckCircle}
                                                     style={{
-                                                        fontSize: '2rem',
+                                                        fontSize: '1.5rem',
                                                         color: 'green',
-                                                        marginRight: '10px',
-                                                        marginLeft: '2px',
+                                                        marginRight: '0px',
+                                                        marginLeft: '10px',
                                                         animation: 'fade-in 0.5s'
                                                     }}
                                                 />
@@ -99,18 +119,20 @@ function Table() {
                                         }
                                         <div style={{
                                             flex: '1',
-                                            marginLeft: '-10px',
+                                            marginLeft: '10px',
                                             display: 'flex',
+                                            height: 'auto',
                                             alignItems: 'center',
                                             fontSize: '1rem',
-                                            color: '#495057'
+                                            color: '#495057',
+                                            wordWrap: 'break-word'
                                         }}>
-                                            <Form.Control
-                                                size="sm"
-                                                style={{border: 'none', width: '100%'}}
-                                                value={item.text}
-                                                onChange={e => handleItemChange(item.id, e.target.value, status)}
-                                            />
+                                            <small>{`${item["key"]}: ${item["value"]}`}</small>
+                                            {/*<Form.Control*/}
+                                            {/*    style={{border: 'none', resize: 'none', height:'auto'}}*/}
+                                            {/*    value={`${item["key"]}: ${item["value"]}`}*/}
+                                            {/*    onChange={e => handleItemChange(item.id, e.target.value, status)}*/}
+                                            {/*/>*/}
                                         </div>
                                     </Card>
                                 ))}

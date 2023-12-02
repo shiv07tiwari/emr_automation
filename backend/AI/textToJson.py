@@ -1,12 +1,9 @@
-from gptapi import getGPTClient
-from utils import *
+from backend.AI.gptapi import getGPTClient
+from backend.AI.utils import *
 import json
 
 
-def text_to_json(request):
-    payload = request["data"]
-    conversation_id = payload['conversation_id']
-    text = payload['text']
+def text_to_json(conversation_id, text, client):
 
     prompt = make_prompt(text)
 
