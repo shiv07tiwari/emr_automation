@@ -1,6 +1,58 @@
 def get_json_format():
-    json = '''{"Name": "", "Age":, "Height": "", "Weight": "", "BMI": "", "Current Medications": "", "Consultation 
-    Notes": ""}'''
+    json = '''
+    {
+  "patient": {
+    "full_name": "",
+    "date_of_birth": "",
+    "gender": "",
+    "address": "",
+    "phone_number": "",
+    "email": "",
+    "emergency_contact_number": "",
+    "patient_id": "", 
+    "health_insurance_info": "",
+    "primary_care_physician": ""
+  },
+  "history": {
+    "medical_history": "",
+    "surgical_history": "",
+    "family_medical_history": "",
+    "medication_history": "",
+    "social_history": "",
+    "known_allergies": "",
+    "list_of_vaccinations": [],
+    "current_medications": [],
+    "dosages": []
+  },
+  "vitals": {
+    "blood_pressure": "",
+    "heart_rate": "",
+    "respiratory_rate": "",
+    "temperature": ""
+  },
+  "physical_attributes": {
+    "height": "",
+    "weight": "",
+    "bmi": ""
+  },
+  "appointment_notes": {
+    "reason_for_visit": "",
+    "subjective_assessment": {
+      "onset_of_symptoms": "",
+      "palliating_or_provoking_factors": "",
+      "region_affected": "",
+      "severity_of_symptoms": "",
+      "time_course_of_symptoms": ""
+    },
+    "objective_assessment": {
+      "physical_symptoms": "",
+      "consultation_notes": "",
+      "follow_up_plan": "",
+      "recommended_follow_up_appointments": ""
+    }
+  }
+}
+    '''
 
     return json
 
