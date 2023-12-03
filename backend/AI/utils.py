@@ -10,10 +10,9 @@ def get_json_format():
     "email": "",
     "emergency_contact_number": "",
     "patient_id": "", 
-    "health_insurance_info": "",
-    "primary_care_physician": ""
   },
   "history": {
+    "primary_care_physician": "",
     "medical_history": "",
     "surgical_history": "",
     "family_medical_history": "",
@@ -36,6 +35,7 @@ def get_json_format():
     "bmi": ""
   },
   "appointment_notes": {
+    "health_insurance_info": "",
     "reason_for_visit": "",
     "subjective_assessment": {
       "onset_of_symptoms": "",
